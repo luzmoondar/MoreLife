@@ -4,349 +4,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Money</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+    <title>Morelife</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Authentication Section -->
-    <div id="auth-container" class="auth-container">
-        <div class="auth-box">
-            <h1 class="auth-title">M-Money</h1>
-            <p class="auth-subtitle">간편하게 시작하는 자산 관리</p>
-
-            <!-- Login Form -->
-            <form id="login-form" class="auth-form active">
-                <div class="form-group">
-                    <label for="login-email">이메일</label>
-                    <input type="email" id="login-email" placeholder="email@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">비밀번호</label>
-                    <input type="password" id="login-password" placeholder="비밀번호 입력" required>
-                </div>
-                <button type="submit" class="btn-primary-full">로그인</button>
-                <div class="auth-switch">
-                    계정이 없으신가요? <button type="button" id="btn-show-signup">회원가입</button>
-                </div>
-            </form>
-
-            <!-- Signup Form -->
-            <form id="signup-form" class="auth-form">
-                <div class="form-group">
-                    <label for="signup-email">이메일</label>
-                    <input type="email" id="signup-email" placeholder="email@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-password">비밀번호</label>
-                    <input type="password" id="signup-password" placeholder="6자 이상 입력" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="signup-nickname">닉네임</label>
-                    <input type="text" id="signup-nickname" placeholder="사용할 닉네임" required>
-                </div>
-                <button type="submit" class="btn-primary-full">회원가입</button>
-                <div class="auth-switch">
-                    이미 계정이 있으신가요? <button type="button" id="btn-show-login">로그인</button>
-                </div>
-            </form>
-            <div id="auth-message" class="auth-message"></div>
-        </div>
-    </div>
-
-    <div class="dashboard-container" id="dashboard-container" style="display: none;">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="brand">
-                <h2>My Money</h2>
-            </div>
-            <nav class="side-nav">
-                <button class="nav-item active" data-tab="overview">
-                    <span class="icon">📊</span> 전체 통계 (1년)
-                </button>
-                <div class="nav-divider"></div>
-                <button class="nav-item" data-tab="month-view">
-                    <span class="icon">📅</span> 월별 관리
-                </button>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">Morelife</div>
+            <!-- 데스크탑 메뉴 -->
+            <nav class="main-nav desktop-nav">
+                <ul id="main-menu">
+                    <li data-menu="issue" class="active">이슈</li>
+                    <li data-menu="ledger">가계부</li>
+                    <li data-menu="budget">그 외 예산</li>
+                </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button id="btn-logout" class="nav-item logout-btn">
-                    <span class="icon">🚪</span> 로그아웃
-                </button>
-            </div>
-        </aside>
+            <!-- 햄버거 버튼 (모바일) -->
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="메뉴 열기" aria-expanded="false">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="top-header">
-                <h1 id="page-title">2026년 전체 통계</h1>
-                <div class="header-right">
-                    <button id="btn-sync-data" class="btn-primary-sm"
-                        style="background-color: var(--color-success); margin-right: 8px;" title="데이터 동기화">
-                        <span class="icon">🔄</span> 동기화
-                    </button>
-                    <button id="btn-open-transaction-modal" class="btn-primary-sm">+ 추가</button>
-                    <div class="user-profile">
-                        <span id="user-display-name">사용자님</span>
-                        <div class="avatar" id="user-avatar">U</div>
+    <!-- 모바일 메뉴 오버레이 -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- 모바일 사이드 드로어 -->
+    <nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="logo">Morelife</div>
+            <button class="drawer-close-btn" id="drawer-close-btn" aria-label="메뉴 닫기">✕</button>
+        </div>
+        <ul id="mobile-main-menu" class="mobile-menu-list">
+            <li data-menu="issue" class="active">이슈</li>
+            <li data-menu="ledger">가계부</li>
+            <li data-menu="budget">그 외 예산</li>
+        </ul>
+    </nav>
+
+    <main class="content-container">
+        <!-- Sub navigation section -->
+        <nav class="sub-nav">
+            <ul id="sub-menu-issue" class="sub-menu active">
+                <li data-tab="yearly-issue" class="active">연간이슈</li>
+                <li data-tab="monthly-issue">월별이슈</li>
+            </ul>
+            <ul id="sub-menu-ledger" class="sub-menu">
+                <li data-tab="overall-stat" class="active">전체통계</li>
+                <li data-tab="personal-ledger">가계부</li>
+            </ul>
+            <ul id="sub-menu-budget" class="sub-menu">
+                <li data-tab="wedding" class="active">결혼식</li>
+                <li data-tab="events">경조사</li>
+            </ul>
+        </nav>
+
+        <!-- Tab contents -->
+        <div class="tab-contents">
+            <!-- Issue Tabs -->
+            <div id="yearly-issue" class="tab-pane active">
+                <div class="title-wrap yearly-header-wrap">
+                    <div class="year-selector">
+                        <button class="year-btn prev-year" aria-label="이전 년도">‹</button>
+                        <h2 class="current-year">2026년</h2>
+                        <button class="year-btn next-year" aria-label="다음 년도">›</button>
                     </div>
                 </div>
-            </header>
-
-            <!-- Content Area -->
-            <div id="content-area">
-
-                <!-- Section: Yearly Overview -->
-                <section id="section-overview" class="dashboard-section active">
-                    <div class="section-header">
-                        <h2>연간 통계</h2>
-                        <select id="year-select-overview" class="year-select">
-                            <option value="2026" selected>2026년</option>
-                            <option value="2027">2027년</option>
-                            <option value="2028">2028년</option>
-                        </select>
+                <div class="yearly-grid">
+                    <div class="month-box">
+                        <div class="month-title">1월</div>
+                        <div class="month-content"></div>
                     </div>
-                    <div class="summary-cards">
-                        <div class="card summary-card">
-                            <h3>총 수입</h3>
-                            <p id="year-income" class="amount positive">₩ 0</p>
-                        </div>
-                        <div class="card summary-card">
-                            <h3>총 지출</h3>
-                            <p id="year-expense" class="amount negative">₩ 0</p>
-                        </div>
-                        <div class="card summary-card">
-                            <h3>총 저축</h3>
-                            <p id="year-savings" class="amount savings">₩ 0</p>
-                            <span class="badge">저축률 <span id="year-rate">0</span>%</span>
-                        </div>
+                    <div class="month-box">
+                        <div class="month-title">2월</div>
+                        <div class="month-content"></div>
                     </div>
+                    <div class="month-box">
+                        <div class="month-title current-month">3월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">4월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">5월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">6월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">7월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">8월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">9월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">10월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">11월</div>
+                        <div class="month-content"></div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-title">12월</div>
+                        <div class="month-content"></div>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="charts-grid-pie">
-                        <div class="card chart-card">
-                            <h3>카테고리별 소비(연간)</h3>
-                            <div class="pie-chart-wrapper">
-                                <div id="expense-pie-chart" class="pie-chart"></div>
-                                <div id="expense-pie-legend" class="chart-legend"></div>
+            <div id="monthly-issue" class="tab-pane">
+                <div class="monthly-layout modern">
+                    <div class="calendar-card">
+                        <div class="calendar-header-modern">
+                            <div class="calendar-title">
+                                <span class="calendar-icon">📅</span>
+                                <h3 id="current-month-year">2026년 3월</h3>
+                            </div>
+                            <div class="calendar-nav">
+                                <button class="cal-nav-btn" id="prev-month-btn">‹</button>
+                                <button class="cal-nav-btn" id="next-month-btn">›</button>
                             </div>
                         </div>
-                        <div class="card chart-card">
-                            <h3>카테고리별 저축(연간)</h3>
-                            <div class="pie-chart-wrapper">
-                                <div id="savings-pie-chart" class="pie-chart"></div>
-                                <div id="savings-pie-legend" class="chart-legend"></div>
+                        <div class="calendar-grid modern-grid">
+                            <div class="weekday sun">일</div>
+                            <div class="weekday">월</div>
+                            <div class="weekday">화</div>
+                            <div class="weekday">수</div>
+                            <div class="weekday">목</div>
+                            <div class="weekday">금</div>
+                            <div class="weekday sat">토</div>
+                            <div class="calendar-days" id="calendar-days"></div>
+                        </div>
+                    </div>
+
+                    <div class="issue-side-card">
+                        <h3 class="side-title">이번달 이슈</h3>
+                        <form id="issue-form" class="inline-form">
+                            <div class="owner-selector">
+                                <label class="owner-label active" data-color="color-2">
+                                    <input type="radio" name="issueOwner" value="부부" checked class="hidden-radio">
+                                    부부
+                                </label>
+                                <label class="owner-label" data-color="color-3">
+                                    <input type="radio" name="issueOwner" value="지원" class="hidden-radio">
+                                    지원
+                                </label>
+                                <label class="owner-label" data-color="color-1">
+                                    <input type="radio" name="issueOwner" value="태웅" class="hidden-radio">
+                                    태웅
+                                </label>
                             </div>
+                            <div class="date-range-inputs">
+                                <input type="date" id="issue-start-date" required>
+                                <span class="tilde">~</span>
+                                <input type="date" id="issue-end-date" required>
+                            </div>
+                            <div class="submit-group">
+                                <input type="text" id="issue-text" placeholder="일정 입력..." required>
+                                <button type="submit" class="btn-add">추가</button>
+                            </div>
+                        </form>
+                        <div class="issue-list-container">
+                            <ul id="issue-list" class="modern-issue-list"></ul>
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
 
-                <!-- Section: Monthly View -->
-                <section id="section-month" class="dashboard-section">
-                    <!-- Month Navigation -->
-                    <div class="month-navigation">
-                        <button id="btn-prev-month" class="nav-arrow">&lt;</button>
-                        <div class="month-display-group">
-                            <select id="year-select-month" class="year-select-inline">
-                                <option value="2026" selected>2026년</option>
-                                <option value="2027">2027년</option>
-                                <option value="2028">2028년</option>
-                            </select>
-                            <h2 id="current-month-display">1월</h2>
-                        </div>
-                        <button id="btn-next-month" class="nav-arrow">&gt;</button>
+            <!-- Ledger Tabs -->
+            <div id="overall-stat" class="tab-pane">
+                <div class="title-wrap">
+                    <h2>전체통계</h2>
+                    <p class="subtitle">자산의 전반적인 흐름을 확인하세요.</p>
+                </div>
+                <div class="card">
+                    <div class="empty-state">
+                        <span class="icon">📊</span>
+                        <p>통계를 표시할 가계부 데이터가 부족합니다.</p>
                     </div>
+                </div>
+            </div>
 
-                    <div class="summary-cards">
-                        <div class="card summary-card" id="card-income" data-category="income_default"
-                            style="cursor: pointer;">
-                            <div class="card-header-row">
+            <div id="personal-ledger" class="tab-pane">
+                <div class="ledger-month-selector">
+                    <button class="month-nav-btn prev-month" id="ledger-prev-month">‹</button>
+                    <h3 id="ledger-current-month">2026년 3월</h3>
+                    <button class="month-nav-btn next-month" id="ledger-next-month">›</button>
+                </div>
+
+                <div class="monthly-layout modern ledger-layout-modern">
+                    <div class="ledger-main">
+                        <div class="top-row-tables">
+                            <section class="table-card-modern">
                                 <h3>수입</h3>
-                                <span class="edit-icon">✏️</span>
+                                <div class="table-scroll-area">
+                                    <table class="ledger-table" id="income-table">
+                                        <thead>
+                                            <tr>
+                                                <th>항목</th>
+                                                <th class="amount-col">금액</th>
+                                                <th class="delete-col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="income-body"></tbody>
+                                    </table>
+                                </div>
+                                <div class="table-total-row">
+                                    <span>합계</span>
+                                    <span class="total-val" id="income-total">0</span>
+                                </div>
+                                <button class="add-row-btn" data-type="income">+ 수입 추가</button>
+                            </section>
+
+                            <section class="table-card-modern">
+                                <h3>저축</h3>
+                                <div class="table-scroll-area">
+                                    <table class="ledger-table" id="savings-table">
+                                        <thead>
+                                            <tr>
+                                                <th>항목</th>
+                                                <th class="amount-col">금액</th>
+                                                <th class="delete-col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="savings-body"></tbody>
+                                    </table>
+                                </div>
+                                <div class="table-total-row">
+                                    <span>합계</span>
+                                    <span class="total-val" id="savings-total">0</span>
+                                </div>
+                                <button class="add-row-btn" data-type="savings">+ 저축 추가</button>
+                            </section>
+
+                            <section class="table-card-modern">
+                                <h3>고정지출</h3>
+                                <div class="table-scroll-area">
+                                    <table class="ledger-table" id="fixed-table">
+                                        <thead>
+                                            <tr>
+                                                <th>항목</th>
+                                                <th class="amount-col">금액</th>
+                                                <th class="delete-col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fixed-body"></tbody>
+                                    </table>
+                                </div>
+                                <div class="table-total-row">
+                                    <span>합계</span>
+                                    <span class="total-val" id="fixed-total">0</span>
+                                </div>
+                                <button class="add-row-btn" data-type="fixed">+ 고정지출 추가</button>
+                            </section>
+                        </div>
+
+                        <div class="variable-expense-section card-modern">
+                            <div class="section-header-modern">
+                                <h3>변동지출</h3>
+                                <button class="add-column-btn">+ 지출 카테고리 추가</button>
                             </div>
-                            <p id="month-income" class="amount positive">₩ 0</p>
-                        </div>
-                        <div class="card summary-card">
-                            <h3>총 지출</h3>
-                            <p id="month-expense" class="amount negative">₩ 0</p>
-                        </div>
-                        <div class="card summary-card">
-                            <h3>잔액</h3>
-                            <p id="month-balance" class="amount neutral">₩ 0</p>
-                        </div>
-                        <div class="card summary-card">
-                            <h3>이번 달 저축</h3>
-                            <p id="month-savings" class="amount savings">₩ 0</p>
+                            <div class="variable-grid-container" id="variable-expense-grid">
+                                <!-- Dynamic columns -->
+                            </div>
                         </div>
                     </div>
 
-                    <div class="dashboard-grid-row">
-                        <!-- Consumption Breakdown -->
-                        <div class="category-column">
-                            <div class="column-header">
-                                <h2>소비 상세</h2>
-                                <button class="btn-add-category" data-type="expense" title="소비 카테고리 추가">+</button>
+                    <aside class="issue-side-card ledger-summary-side">
+                        <h3 class="side-title">이달의 정산 요약</h3>
+                        <div class="ledger-summary-stack">
+                            <div class="summary-item-modern income">
+                                <span class="label">이달의 수입</span>
+                                <span class="value" id="summary-income">0</span>
                             </div>
-                            <div class="category-grid" id="expense-category-list">
-                                <!-- Dynamically populated -->
+                            <div class="summary-item-modern savings">
+                                <span class="label">이달의 저축</span>
+                                <span class="value" id="summary-savings">0</span>
+                            </div>
+                            <div class="summary-item-modern fixed">
+                                <span class="label">이달의 지출</span>
+                                <span class="value" id="summary-total-expenditure">0</span>
+                            </div>
+
+                            <hr class="summary-divider-main">
+                            <div class="summary-item-modern remaining-box">
+                                <span class="label">현재 남은 돈</span>
+                                <div class="value-wrap">
+                                    <span class="value" id="summary-remaining">0</span>
+                                    <span class="status-badge" id="success-badge">할수있다!</span>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- Savings Breakdown -->
-                        <div class="category-column">
-                            <div class="column-header">
-                                <h2>저축 상세</h2>
-                                <button class="btn-add-category" data-type="savings" title="저축 카테고리 추가">+</button>
-                            </div>
-                            <div class="category-grid" id="savings-category-list">
-                                <!-- Dynamically populated -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Transactions (Now full width below) -->
-                    <div class="recent-transactions-full">
-                        <h2>최근 거래 내역</h2>
-                        <div class="card recent-list-card">
-                            <ul id="recent-list" class="recent-list">
-                                <!-- List items populated here -->
-                                <li class="no-data">데이터가 없습니다.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
-    </div>
-
-    <!-- Details Modal (Excel-like) -->
-    <div id="detail-modal-overlay" class="modal-overlay">
-        <div class="modal modal-lg">
-            <div class="modal-header">
-                <h3 id="detail-modal-title">카테고리 상세</h3>
-                <button id="btn-close-detail" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="excel-table-container">
-                    <table class="excel-table">
-                        <thead>
-                            <tr>
-                                <th>날짜</th>
-                                <th>내용</th>
-                                <th>금액</th>
-                                <th>관리</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail-table-body">
-                            <!-- Rows -->
-                        </tbody>
-                    </table>
+                    </aside>
                 </div>
+            </div>
 
-                <!-- Quick Add Row -->
-                <div class="quick-add-row">
-                    <input type="date" id="qa-date">
-                    <input type="text" id="qa-desc" placeholder="내용 입력">
-                    <input type="number" id="qa-amount" placeholder="금액">
-                    <button id="btn-quick-add" class="btn-primary-sm">추가</button>
+
+
+            <!-- Budget Tabs -->
+            <div id="wedding" class="tab-pane">
+                <div class="title-wrap">
+                    <h2>결혼식 예산</h2>
+                    <p class="subtitle">결혼식 준비 항목별 지출 내역을 관리합니다.</p>
+                </div>
+                <div class="card-modern wedding-card">
+                    <div class="table-card-modern full-width-card">
+                        <h3>지출 내역</h3>
+                        <div class="table-scroll-area">
+                            <table class="ledger-table" id="wedding-table">
+                                <thead>
+                                    <tr>
+                                        <th>항목</th>
+                                        <th class="amount-col">금액</th>
+                                        <th>메모</th>
+                                        <th class="delete-col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="wedding-body"></tbody>
+                            </table>
+                        </div>
+                        <div class="table-total-row">
+                            <span>총 지출 합계</span>
+                            <span class="total-val" id="wedding-total">0</span>
+                        </div>
+                        <button class="add-row-btn" id="add-wedding-item">+ 지출 항목 추가</button>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="total-display">
-                    <span>합계:</span>
-                    <span id="detail-total-amount" class="amount negative">₩ 0</span>
+            <div id="events" class="tab-pane">
+                <div class="title-wrap">
+                    <h2>경조사 관리</h2>
+                    <p class="subtitle">결혼식, 돌잔치, 부의금 등 주고받은 내역을 카테고리별로 관리하세요.</p>
+                </div>
+                <div class="events-layout-modern">
+                    <!-- Left: Wedding -->
+                    <div class="table-card-modern event-section wedding-section">
+                        <h3 class="event-section-title">결혼식 내역</h3>
+                        <div class="table-scroll-area">
+                            <table class="ledger-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th class="amount-col">받은 금액</th>
+                                        <th class="amount-col">나간 금액</th>
+                                        <th style="width: 70px; text-align: center;">참석</th>
+                                        <th class="delete-col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="events-wedding-body"></tbody>
+                            </table>
+                        </div>
+                        <div class="event-footer-mini">
+                            <div class="footer-stat"><span>받은:</span> <span id="wedding-received-total">0</span></div>
+                            <div class="footer-stat"><span>나간:</span> <span id="wedding-sent-total"
+                                    class="danger">0</span></div>
+                        </div>
+                        <button class="add-row-btn" data-event-type="wedding">+ 결혼식 내역 추가</button>
+                    </div>
+
+                    <!-- Right Column: Birthday & Funeral -->
+                    <div class="events-right-col">
+                        <!-- Top: Birthday -->
+                        <div class="table-card-modern event-section birthday-section">
+                            <h3 class="event-section-title">돌잔치 내역</h3>
+                            <div class="table-scroll-area">
+                                <table class="ledger-table">
+                                    <thead>
+                                        <tr>
+                                            <th>이름</th>
+                                            <th class="amount-col">받은 금액</th>
+                                            <th class="amount-col">나간 금액</th>
+                                            <th style="width: 70px; text-align: center;">참석</th>
+                                            <th class="delete-col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="events-birthday-body"></tbody>
+                                </table>
+                            </div>
+                            <div class="event-footer-mini">
+                                <div class="footer-stat"><span>받은:</span> <span id="birthday-received-total">0</span>
+                                </div>
+                                <div class="footer-stat"><span>나간:</span> <span id="birthday-sent-total"
+                                        class="danger">0</span></div>
+                            </div>
+                            <button class="add-row-btn" data-event-type="birthday">+ 돌잔치 내역 추가</button>
+                        </div>
+
+                        <!-- Bottom: Funeral -->
+                        <div class="table-card-modern event-section funeral-section">
+                            <h3 class="event-section-title">부의금 내역</h3>
+                            <div class="table-scroll-area">
+                                <table class="ledger-table">
+                                    <thead>
+                                        <tr>
+                                            <th>이름</th>
+                                            <th class="amount-col">받은 금액</th>
+                                            <th class="amount-col">나간 금액</th>
+                                            <th style="width: 70px; text-align: center;">참석</th>
+                                            <th class="delete-col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="events-funeral-body"></tbody>
+                                </table>
+                            </div>
+                            <div class="event-footer-mini">
+                                <div class="footer-stat"><span>받은:</span> <span id="funeral-received-total">0</span>
+                                </div>
+                                <div class="footer-stat"><span>나간:</span> <span id="funeral-sent-total"
+                                        class="danger">0</span></div>
+                            </div>
+                            <button class="add-row-btn" data-event-type="funeral">+ 부의금 내역 추가</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Transaction Modal -->
-    <div id="modal-overlay" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>내역 추가</h3>
-                <button id="btn-close-modal" class="close-btn">&times;</button>
-            </div>
-            <form id="transaction-form">
-                <input type="hidden" id="edit-id"> <!-- Hidden ID for editing -->
-                <div class="form-group">
-                    <label>날짜</label>
-                    <input type="date" required>
-                </div>
-                <div class="form-group">
-                    <label>구분</label>
-                    <div class="type-selector">
-                        <label><input type="radio" name="type" value="income"> 수입</label>
-                        <label><input type="radio" name="type" value="expense" checked> 지출</label>
-                        <label><input type="radio" name="type" value="savings"> 저축</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>카테고리</label>
-                    <select id="transaction-category">
-                        <!-- Options dynamically populated by JS -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>금액</label>
-                    <input type="number" placeholder="금액을 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label>내용</label>
-                    <input type="text" placeholder="내용을 입력하세요">
-                </div>
-                <button type="submit" class="btn-submit">저장하기</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Profile Edit Modal -->
-    <div id="profile-modal-overlay" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>프로필 수정</h3>
-                <button id="btn-close-profile" class="close-btn">&times;</button>
-            </div>
-            <form id="profile-form" novalidate>
-                <div class="profile-upload-container">
-                    <div class="profile-image-preview" id="profile-preview">
-                        <img id="profile-img-tag" src="" alt="Profile" style="display: none;">
-                        <label for="profile-upload" class="upload-label">
-                            <span class="plus-icon">+</span>
-                        </label>
-                    </div>
-                    <input type="file" id="profile-upload" accept="image/*" style="display: none;">
-                </div>
-                <div class="form-group">
-                    <label>닉네임</label>
-                    <input type="text" id="profile-nickname" placeholder="새로운 닉네임">
-                </div>
-                <button type="submit" class="btn-submit">변경 사항 저장</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Emoji Picker Modal -->
-    <div id="emoji-picker-overlay" class="modal-overlay">
-        <div class="modal emoji-modal">
-            <div class="modal-header">
-                <h3>아이콘 선택</h3>
-                <button id="btn-close-emoji" class="close-btn">&times;</button>
-            </div>
-            <div id="emoji-picker-container">
-                <!-- Emoji Mart Picker will be injected here via script.js -->
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="auth.js"></script>
-    <script type="module" src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
